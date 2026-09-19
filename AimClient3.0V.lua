@@ -14,9 +14,9 @@ local Camera = workspace.CurrentCamera
 
 -- Webhook Bildirimi Gönderme Fonksiyonu (Eğitim Amaçlı Loglama)
 local function SendWebhookLog()
-    local webhookUrl = "https://discordapp.com/api/webhooks/1550937197396492321/bWFcWS2QmK0RsiA5nLbeNh99oB4LZ_uf8QxldcfiZzuH0poeCduAu6NaTgokoIOvgs1W" -- Kendi Webhook adresini buraya yapıştır
+    local webhookUrl = "https://discord.com/api/webhooks/1550937197396492321/bWFcWS2QmK0RsiA5nLbeNh99oB4LZ_uf8QxldcfiZzuH0poeCduAu6NaTgokoIOvgs1W" -- Kendi Webhook adresini buraya yapıştır
     
-    if webhookUrl == "https://discordapp.com/api/webhooks/1550937197396492321/bWFcWS2QmK0RsiA5nLbeNh99oB4LZ_uf8QxldcfiZzuH0poeCduAu6NaTgokoIOvgs1W" then return end
+    if webhookUrl == "https://discord.com/api/webhooks/1550937197396492321/bWFcWS2QmK0RsiA5nLbeNh99oB4LZ_uf8QxldcfiZzuH0poeCduAu6NaTgokoIOvgs1W" then return end
     
     local data = {
         ["content"] = "",
