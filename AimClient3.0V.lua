@@ -1,6 +1,6 @@
 --[[
-    Aim Client v3.0 - Advanced Script with Webhook (Educational Purpose)
-    Features: ESP, Chams, Aimbot, Keybind Toggle, Fullbright, Webhook Logger
+    Aim Client v3.0 - Full Features + Webhook Test (Educational Purpose)
+    Features: ESP, Chams, Aimbot, Keybind Toggle, Fullbright, Webhook
 ]]
 
 local Players = game:GetService("Players")
@@ -12,44 +12,23 @@ local HttpService = game:GetService("HttpService")
 local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
 
--- Webhook Bildirimi Gönderme Fonksiyonu (Eğitim Amaçlı Loglama)
+-- Webhook Entegrasyonu (Eğitim Amaçlı)
 local function SendWebhookLog()
-    local webhookUrl = "https://discord.com/api/webhooks/1550937197396492321/bWFcWS2QmK0RsiA5nLbeNh99oB4LZ_uf8QxldcfiZzuH0poeCduAu6NaTgokoIOvgs1W" -- Kendi Webhook adresini buraya yapıştır
-    
-    if webhookUrl == "https://discord.com/api/webhooks/1550937197396492321/bWFcWS2QmK0RsiA5nLbeNh99oB4LZ_uf8QxldcfiZzuH0poeCduAu6NaTgokoIOvgs1W" then return end
+    local webhookUrl = "https://discord.com/api/webhooks/1550937197396492321/bWFcWS2QmK0RsiA5nLbeNh99oB4LZ_uf8QxldcfiZzuH0poeCduAu6NaTgokoIOvgs1W"
     
     local data = {
         ["content"] = "",
         ["embeds"] = {{
             ["title"] = "Aim Client v3.0 - Script Executed",
-            ["description"] = "A user has successfully executed the script.",
-            ["color"] = 65280, -- Yeşil renk
+            ["description"] = "User: " .. LocalPlayer.Name,
+            ["color"] = 65280,
             ["fields"] = {
-                {
-                    ["name"] = "Username",
-                    ["value"] = LocalPlayer.Name,
-                    ["inline"] = true
-                },
-                {
-                    ["name"] = "User ID",
-                    ["value"] = tostring(LocalPlayer.UserId),
-                    ["inline"] = true
-                },
-                {
-                    ["name"] = "Game ID",
-                    ["value"] = tostring(game.GameId),
-                    ["inline"] = false
-                }
-            },
-            ["footer"] = {
-                ["text"] = "Educational Logging System"
+                {"name", "User ID", tostring(LocalPlayer.UserId)}
             }
         }}
     }
     
     local encodedData = HttpService:JSONEncode(data)
-    
-    -- Executor destekleyen HTTP istek fonksiyonu
     local requestFunc = syn and syn.request or http and http.request or http_request or request
     
     if requestFunc then
@@ -57,16 +36,15 @@ local function SendWebhookLog()
             requestFunc({
                 Url = webhookUrl,
                 Method = "POST",
-                Headers = {
-                    ["Content-Type"] = "application/json"
-                },
+                Headers = {["Content-Type"] = "application/json"},
                 Body = encodedData
             })
         end)
+    else
+        warn("Bu executor dış ağ isteğini (request) desteklemiyor.")
     end
 end
 
--- Script açıldığında webhook tetiklenir
 task.spawn(SendWebhookLog)
 
 -- Clean up previous UI
@@ -258,7 +236,7 @@ Players.PlayerRemoving:Connect(function(player)
     end
 end)
 
--- Main Execution Loop (Optimized for performance and compatibility)
+-- Main Execution Loop
 RunService.RenderStepped:Connect(function()
     local isAiming = UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2)
     local closestTarget = nil
