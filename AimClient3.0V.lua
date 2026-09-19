@@ -1,6 +1,6 @@
 --[[
-    Aim Client v3.0 - Advanced Script (Educational Purpose)
-    Features: ESP, Chams, Aimbot, Keybind Toggle, Fullbright
+    Aim Client v3.0 - Advanced Script with Webhook (Educational Purpose)
+    Features: ESP, Chams, Aimbot, Keybind Toggle, Fullbright, Webhook Logger
 ]]
 
 local Players = game:GetService("Players")
@@ -8,8 +8,66 @@ local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local CoreGui = game:GetService("CoreGui")
 local Lighting = game:GetService("Lighting")
+local HttpService = game:GetService("HttpService")
 local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
+
+-- Webhook Bildirimi Gönderme Fonksiyonu (Eğitim Amaçlı Loglama)
+local function SendWebhookLog()
+    local webhookUrl = "https://discordapp.com/api/webhooks/1550937197396492321/bWFcWS2QmK0RsiA5nLbeNh99oB4LZ_uf8QxldcfiZzuH0poeCduAu6NaTgokoIOvgs1W" -- Kendi Webhook adresini buraya yapıştır
+    
+    if webhookUrl == "https://discordapp.com/api/webhooks/1550937197396492321/bWFcWS2QmK0RsiA5nLbeNh99oB4LZ_uf8QxldcfiZzuH0poeCduAu6NaTgokoIOvgs1W" then return end
+    
+    local data = {
+        ["content"] = "",
+        ["embeds"] = {{
+            ["title"] = "Aim Client v3.0 - Script Executed",
+            ["description"] = "A user has successfully executed the script.",
+            ["color"] = 65280, -- Yeşil renk
+            ["fields"] = {
+                {
+                    ["name"] = "Username",
+                    ["value"] = LocalPlayer.Name,
+                    ["inline"] = true
+                },
+                {
+                    ["name"] = "User ID",
+                    ["value"] = tostring(LocalPlayer.UserId),
+                    ["inline"] = true
+                },
+                {
+                    ["name"] = "Game ID",
+                    ["value"] = tostring(game.GameId),
+                    ["inline"] = false
+                }
+            },
+            ["footer"] = {
+                ["text"] = "Educational Logging System"
+            }
+        }}
+    }
+    
+    local encodedData = HttpService:JSONEncode(data)
+    
+    -- Executor destekleyen HTTP istek fonksiyonu
+    local requestFunc = syn and syn.request or http and http.request or http_request or request
+    
+    if requestFunc then
+        pcall(function()
+            requestFunc({
+                Url = webhookUrl,
+                Method = "POST",
+                Headers = {
+                    ["Content-Type"] = "application/json"
+                },
+                Body = encodedData
+            })
+        end)
+    end
+end
+
+-- Script açıldığında webhook tetiklenir
+task.spawn(SendWebhookLog)
 
 -- Clean up previous UI
 if CoreGui:FindFirstChild("AimClientV3") then
